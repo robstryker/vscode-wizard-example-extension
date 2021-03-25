@@ -2,7 +2,7 @@
   "name": "vscode-wizard-test",
   "author": "redhat",
   "publisher": "redhat",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "A mid-weight page framework for generating wizards in a vscode webview.",
   "license": "Apache-2.0",
   "tags": [

@@ -35,4 +35,4 @@ First release.
 
 ## License
 
-vscode-page is released under the Apache License 2.0 license.
+vscode-wizard-example-extension is released under the Apache License 2.0 license.

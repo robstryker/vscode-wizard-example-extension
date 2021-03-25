@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"downlevelIteration": true,
+    "experimentalDecorators": true,
+		"lib": [ "es6" ],
+		"module": "commonjs",
+		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
+		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
+		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
+		"noUnusedLocals": true,
+		"outDir": "out",
+		"resolveJsonModule": true,
+		"rootDir": ".",
+		"sourceMap": true,
+		"strict": false,   /* enable all strict type-checking options */
+		"target": "es6",
+  },
+	"exclude": [
+		"node_modules",
+    ".vscode-test",
+    "test-resources"
+  ],
+  "include": [
+    "src",
+    "build",
+    "test",
+    "schemas"
+   ]
+}

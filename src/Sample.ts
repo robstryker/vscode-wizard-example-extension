@@ -72,14 +72,39 @@ export function demonstrateSinglePageAllControls(context: vscode.ExtensionContex
                     initialValue: "Textbox initial value"
                 },
                 {
+                    id: "addusername2",
+                    label: "Username2",
+                    description: "With description",
+                    type: "textbox",
+                    initialValue: "Textbox initial value"
+                },
+                {
                     id: "over18",
                     label: "Over 18?",
                     type: "checkbox",
                     initialValue: "true"
                 },
                 {
+                    id: "over182",
+                    label: "Over 18?2",
+                    description: "With description",
+                    type: "checkbox",
+                    initialValue: "true"
+                },
+                {
                     id: "bio",
                     label: "Biography",
+                    type: "textarea",
+                    initialValue: "this is weird\nblahblah",
+                    properties: {
+                        rows: "4",
+                        columns: "10"
+                    }
+                },
+                {
+                    id: "bio2",
+                    label: "Biography2",
+                    description: "With description",
                     type: "textarea",
                     initialValue: "this is weird\nblahblah",
                     properties: {
@@ -99,8 +124,32 @@ export function demonstrateSinglePageAllControls(context: vscode.ExtensionContex
                     }
                 },
                 {
+                    id: "gender2",
+                    label: "Gender2",
+                    type: "radio",
+                    description: "With description",
+                    initialValue: "male",
+                    properties: {
+                        options: [
+                            "male", "female", "other"
+                        ]
+                    }
+                },
+                {
                     id: "favparent",
                     label: "Favorite Parent",
+                    type: "select",
+                    initialValue: "mom",
+                    properties: {
+                        options: [
+                           "mom", "dad"
+                        ]
+                    }
+                },
+                {
+                    id: "favparent2",
+                    label: "Favorite Parent2",
+                    description: "With description",
                     type: "select",
                     initialValue: "mom",
                     properties: {
@@ -121,8 +170,35 @@ export function demonstrateSinglePageAllControls(context: vscode.ExtensionContex
                     }
                 },
                 {
+                    id: "religion2",
+                    label: "Religion2",
+                    description: "With description",
+                    type: "combo",
+                    initialValue: "Pastafarian",
+                    properties: {
+                        options: [
+                           "Jedi", "Pastafarian"
+                        ]
+                    }
+                },
+                {
                     id: "favoriteLanguage",
                     label: "Favorite Programming Language",
+                    type: "combo",
+                    initialValue: "Java",
+                    optionProvider: (parameters:any) => {
+                        let ret = [];
+                        // pull from a model
+                        ret.push("Perl");
+                        ret.push("Java");
+                        ret.push("Brainfuck");
+                        return ret;
+                    }
+                },            
+                {
+                    id: "favoriteLanguage2",
+                    label: "Favorite Programming Language2",
+                    description: "With description",
                     type: "combo",
                     initialValue: "Java",
                     optionProvider: (parameters:any) => {

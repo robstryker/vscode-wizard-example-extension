@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { WebviewWizard } from '@redhat-developer/vscode-wizard';
-import { demonstrateSinglePageAllControls } from "./Sample";
+import { demonstrateSinglePageFormCustomSave } from "./Sample";
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -17,7 +17,7 @@ function registerCommands(context: vscode.ExtensionContext) {
   context.subscriptions.push(homePage);
 
   function openSampleWizard(context: vscode.ExtensionContext) {
-    const wiz: WebviewWizard = demonstrateSinglePageAllControls(context);
+    const wiz: WebviewWizard = demonstrateSinglePageFormCustomSave(context);
     wiz.open();
   }
 }

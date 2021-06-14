@@ -308,7 +308,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                         close: false,
                         returnObject: null,
                         templates: [
-                            {id: "vscode-wizard/updateWizardTitle", content: newTitle},
+                            {id: UPDATE_TITLE, content: newTitle},
                         ]
                     });
                 });

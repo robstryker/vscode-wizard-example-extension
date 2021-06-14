@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { BUTTONS, SEVERITY, ValidatorResponseItem, WebviewWizard, WizardDefinition,
+import { UPDATE_TITLE, BUTTONS, SEVERITY, ValidatorResponseItem, WebviewWizard, WizardDefinition,
     IWizardPage, PerformFinishResponse } from '@redhat-developer/vscode-wizard';
 
 export function getTwoPageLinearSampleWizardWithValidation(context: vscode.ExtensionContext) : WebviewWizard {
@@ -302,13 +302,13 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
             },
             performFinish(wizard:WebviewWizard, data: any): Promise<PerformFinishResponse | null> {
                 vscode.window.showInformationMessage('User ' + data.addusername + ' has been saved');
+                let newTitle : string = "Edit " + data.addusername + " Cluster";
                 return new Promise<PerformFinishResponse | null>((res,rej) => {
                     res({
                         close: false,
                         returnObject: null,
                         templates: [
-                            {id: "vscode-wizard/updateWizardTitle",
-                            content: "Edit " + data.addusername + " Cluster"}
+                            {id: "vscode-wizard/updateWizardTitle", content: newTitle},
                         ]
                     });
                 });

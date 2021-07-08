@@ -24,6 +24,10 @@ export function getTwoPageLinearSampleWizardWithValidation(context: vscode.Exten
                 if( username === 'Max') {
                     items.push(createValidationItem(SEVERITY.ERROR, "addusername", "Max is not allowed to use this wizard. Sorry Max!"));
                 }
+                if( username === 'Fred') {
+                    items.push(createValidationItem(SEVERITY.WARN, "addusername", 
+                    "Fred may cause you to have to do more work"));
+                }
                 if( username === 'El Jefe') {
                     items.push(createValidationItem(SEVERITY.INFO, "addusername", 
                     "I am overjoyed to see my overlord, El Jefe, long may he reign!"));
@@ -215,6 +219,10 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                     items.push(createValidationItem(SEVERITY.ERROR, "addusername", 
                     "Max is not allowed to use this wizard. Sorry Max!"));
                 }
+                if( username === 'Fred') {
+                    items.push(createValidationItem(SEVERITY.WARN, "addusername", 
+                    "Fred may cause you to have to do more work"));
+                }
                 if( username === 'El Jefe') {
                     items.push(createValidationItem(SEVERITY.INFO, "addusername", 
                     "I am overjoyed to see my overlord, El Jefe, long may he reign!"));
@@ -234,22 +242,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
     return wiz;
   }
 
-  export function demonstrateSinglePageAllControlsOverrideButtons(context: vscode.ExtensionContext) : WebviewWizard {
-    let def : WizardDefinition = getSinglePageAllControlsDefinition(context);
-    const wiz2: WebviewWizard = new (class MyWizard extends WebviewWizard {
-        getUpdatedWizardControls(parameters: any, validate: boolean): string {
-            if( validate ) {
-                // Don't care about return value here, just want pageComplete to be set
-                this.generateValidationTemplates(parameters);
-            }
-            let canFinishNow = this.canFinishInternal(parameters);
-            return this.createButton("buttonFinish", "finishPressed()", canFinishNow, "All Done!");
-        }
-    })("sample3", "sample3", context, def, new Map<string,string>());
-    return wiz2;
-  }
-
-  export function demonstrateSinglePageFormCustomSave(context: vscode.ExtensionContext) : WebviewWizard {
+  export function getSinglePageFormCustomSaveDefinition(context: vscode.ExtensionContext) : WizardDefinition {
     let existingName : string = 'Bob';
     let def : WizardDefinition = {
         title: "Edit " + existingName + " cluster", 
@@ -306,6 +299,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                 return new Promise<PerformFinishResponse | null>((res,rej) => {
                     res({
                         close: false,
+                        success: true,
                         returnObject: null,
                         templates: [
                             {id: UPDATE_TITLE, content: newTitle},
@@ -321,12 +315,16 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
             }
           }
       };
-      let data : Map<string,string> = new Map<string,string>();
-      data.set("addusername", existingName);
-      const wiz: WebviewWizard = new WebviewWizard("sample1", "sample1", context, def, data);
-      return wiz;
-  }
-
+      return def;
+    }
+    export function demonstrateSinglePageFormCustomSave(context: vscode.ExtensionContext) : WebviewWizard {
+        let def: WizardDefinition = getSinglePageFormCustomSaveDefinition(context);
+        def.showDirtyState = true;
+        let data : Map<string,string> = new Map<string,string>();
+        data.set("addusername", 'Bob');
+        const wiz: WebviewWizard = new WebviewWizard("sample1", "sample1", context, def, data);
+        return wiz;
+    }
 
   export function demonstrateHiddenHeaders(context: vscode.ExtensionContext) : WebviewWizard {
 

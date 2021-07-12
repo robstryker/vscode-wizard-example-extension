@@ -2,7 +2,7 @@
     "name": "vscode-wizard-test",
     "author": "redhat",
     "publisher": "redhat",
-    "version": "0.2.9",
+    "version": "0.2.15",
     "description": "A mid-weight page framework for generating wizards in a vscode webview.",
     "license": "Apache-2.0",
     "tags": [
@@ -63,7 +63,7 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "@redhat-developer/vscode-wizard": "^0.2.14"
+        "@redhat-developer/vscode-wizard": "^0.2.15"
     },
     "devDependencies": {
         "@types/mocha": "^7.0.1",

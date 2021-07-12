@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { UPDATE_TITLE, BUTTONS, SEVERITY, ValidatorResponseItem, WebviewWizard, WizardDefinition,
     IWizardPage, PerformFinishResponse } from '@redhat-developer/vscode-wizard';
+import { FieldDefinitionState } from '@redhat-developer/vscode-wizard/lib/WebviewWizard';
 
 export function getTwoPageLinearSampleWizardWithValidation(context: vscode.ExtensionContext) : WebviewWizard {
     let def : WizardDefinition = {
@@ -234,6 +235,64 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
     };
     return def;
   }
+
+
+  export function getSinglePageDependentControls(context: vscode.ExtensionContext) : WizardDefinition {
+    let def : WizardDefinition = {
+      title: "Dependent Controls Demonstration Wizard", 
+      description: "A wizard to demonstrate dependent enablement / values",
+      pages: [
+        {
+            id: 'page1',
+            title: "Shiny Input Objects",
+            description: "On this page, you can look at all the shiny input objects we support",
+            fields: [
+                {
+                    id: "over18",
+                    label: "Over 18?",
+                    type: "checkbox",
+                    description: "Is the user of legal age? This is important.",
+                    initialValue: "true",
+                    executableJavascriptOnModification: "if(!this.checked) {wizardMap.set('actualAge', 0);wizardMap.set('awesome', false);}; fieldChanged(this, this.checked)"
+                },
+                {
+                    id: "actualAge",
+                    label: "Age",
+                    description: "How old are you really?!",
+                    type: "number",
+                    initialValue: "15"
+                },
+                {
+                    id: "awesome",
+                    label: "Are you awesome??",
+                    type: "checkbox",
+                    description: "Are you awesome?",
+                    initialValue: "true",
+                }
+            ],
+            validator: (parameters:any, previousParams: any) => {
+                console.log("validating");
+                if( parameters.over18 !== previousParams.over18) {
+                    const m : Map<string,FieldDefinitionState> = new Map();
+                    m.set("actualAge", {enabled: parameters.over18});
+                    m.set("awesome", {enabled: parameters.over18});
+                    return { items: [], fieldRefresh: m};
+                }
+                return { items: [], fieldRefresh: new Map() };
+            },
+          }
+        ],
+    };
+    return def;
+  }
+
+  export function demonstrateSinglePageDependentControls(context: vscode.ExtensionContext) : WebviewWizard {
+    let def : WizardDefinition = getSinglePageDependentControls(context);
+    const wiz: WebviewWizard = new WebviewWizard("sample8", "sample8", context, def, 
+            new Map<string,string>());
+    return wiz;
+  }
+
 
   export function demonstrateSinglePageAllControls(context: vscode.ExtensionContext) : WebviewWizard {
     let def : WizardDefinition = getSinglePageAllControlsDefinition(context);

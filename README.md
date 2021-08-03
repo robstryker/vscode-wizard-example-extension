@@ -26,6 +26,9 @@ vsce package
 
 To demonstrate this example, use the command prompt in vscode (ctrl+shift+p) to execute the command `ext.home`. This should bring up a webview with the suggested UI. 
 
+## Screenshot
+![image](https://user-images.githubusercontent.com/630383/128065016-798709f0-4b70-4fe6-aee9-9a6cbd6d6c19.png)
+
 
 ## Release Notes
 

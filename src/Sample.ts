@@ -211,7 +211,21 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                         ret.push("Brainfuck");
                         return ret;
                     }
-                }
+                },
+                {
+                    id: "someFilePicker",
+                    label: "A File Picker:",
+                    initialValue: "",
+                    type: "file-picker",
+                    placeholder: "Select file in PEM format.",
+                    dialogOptions: {
+                        canSelectMany: false,
+                        filters: {
+                            'All': ['*'],
+                            'PEM': ['pem', 'crt', 'cer', 'key']
+                        }
+                    }
+                },
             ],
             validator: (parameters:any) => {
                 let items : ValidatorResponseItem[] = [];

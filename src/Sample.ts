@@ -79,6 +79,23 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
     let def : WizardDefinition = {
       title: "Control Demonstration Wizard", 
       description: "A wizard to demonstrate all the currently supported controls on one single page!",
+      workflowManager: {
+        canFinish(wizard:WebviewWizard, data: any): boolean {
+            return true;
+        },
+        performFinish(wizard:WebviewWizard, data: any): Promise<PerformFinishResponse | null> {
+            vscode.window.showInformationMessage(JSON.stringify(data));
+            return new Promise<PerformFinishResponse | null>((res,rej) => {
+                res(null);
+            });
+        },
+        getNextPage(page:IWizardPage, data: any): IWizardPage | null {
+            return null;
+        },
+        getPreviousPage(page:IWizardPage, data: any): IWizardPage | null {
+            return null;
+        }
+      },
       pages: [
         {
             id: 'page1',
@@ -209,6 +226,25 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                         ret.push("Perl");
                         ret.push("Java");
                         ret.push("Brainfuck");
+                        return ret;
+                    }
+                },
+                {
+                    id: "bestCryptos",
+                    label: "Best Cryptocurrencies",
+                    description: "Select the best cryptocurrencies out there right now",
+                    type: "multiselect",
+                    initialValue: "Sushi\nPickle",
+                    optionProvider: (parameters:any) => {
+                        let ret = [];
+                        // pull from a model
+                        ret.push("Pickle");
+                        ret.push("BTC");
+                        ret.push("Ethereum");
+                        ret.push("Sushi");
+                        ret.push("Alchemix");
+                        ret.push("Popsicle");
+                        ret.push("CRV");
                         return ret;
                     }
                 },

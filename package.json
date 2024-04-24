@@ -30,7 +30,7 @@
         "modules"
     ],
     "engines": {
-        "vscode": "^1.52.0"
+        "vscode": "^1.53.0"
     },
     "main": "out/src/wizardActivator.js",
     "typings": "out/src/wizardActivator.d.ts",
@@ -63,7 +63,7 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "@redhat-developer/vscode-wizard": "^0.2.15"
+        "@redhat-developer/vscode-wizard": "^0.3.1"
     },
     "devDependencies": {
         "@types/mocha": "^7.0.1",

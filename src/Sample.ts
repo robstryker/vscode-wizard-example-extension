@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { UPDATE_TITLE, BUTTONS, SEVERITY, ValidatorResponseItem, WebviewWizard, WizardDefinition,
-    IWizardPage, PerformFinishResponse } from '@redhat-developer/vscode-wizard';
-import { FieldDefinitionState } from '@redhat-developer/vscode-wizard/lib/WebviewWizard';
+import { UPDATE_TITLE, BUTTONS, SEVERITY, ValidatorResponse, ValidatorResponseItem, WebviewWizard, WizardDefinition,
+    IWizardPage, PerformFinishResponse, StandardWizardPageRenderer } from '@redhat-developer/vscode-wizard';
+import { createButton, FieldDefinitionState, WizardPageFieldDefinition} from '@redhat-developer/vscode-wizard/lib/WebviewWizard';
 
 export function getTwoPageLinearSampleWizardWithValidation(context: vscode.ExtensionContext) : WebviewWizard {
     let def : WizardDefinition = {
@@ -19,7 +19,7 @@ export function getTwoPageLinearSampleWizardWithValidation(context: vscode.Exten
                     type: "textbox"
                 }
             ],
-            validator: (parameters:any) => {
+            validator: (parameters:any, previousParameters?: any) => {
                 let items : ValidatorResponseItem[] = [];
                 const username = parameters.addusername;
                 if( username === 'Max') {
@@ -33,7 +33,8 @@ export function getTwoPageLinearSampleWizardWithValidation(context: vscode.Exten
                     items.push(createValidationItem(SEVERITY.INFO, "addusername", 
                     "I am overjoyed to see my overlord, El Jefe, long may he reign!"));
                 }
-                return { items: items };
+                const ret : ValidatorResponse = { items: items };
+                return ret;
             }
           }, 
           {
@@ -328,7 +329,8 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                     m.set("awesome", {enabled: parameters.over18});
                     return { items: [], fieldRefresh: m};
                 }
-                return { items: [], fieldRefresh: new Map() };
+                const ret : ValidatorResponse = { items: [], fieldRefresh: new Map() };
+                return ret;
             },
           }
         ],
@@ -461,7 +463,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                   const age : Number = Number(parameters.age);
                   if( !parameters.age || isNaN(parameters.age)) {
                     items.push(createValidationItem(SEVERITY.ERROR, "age", "Age must not be blank"));
-                  } else if( age <= 3) {
+                  } else if( age.valueOf() <= 3) {
                     items.push(createValidationItem(SEVERITY.ERROR, "age", "No babies allowed"));
                   }
                   return {items: items};
@@ -501,7 +503,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
             performFinish(wizard:WebviewWizard, data: any): Promise<PerformFinishResponse | null> {
                 // Do something
                 var age : Number = Number(data.age);
-                if( age >= 18 ) {
+                if( age.valueOf() >= 18 ) {
                     vscode.window.showInformationMessage('Adult has cc number: ' + data.cc);
                 } else {
                     vscode.window.showInformationMessage('Child has favorite color: ' + data.favcolor);
@@ -514,7 +516,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                 if( page.getId() === 'page1') {
                     var age : Number = Number(data.age);
                     const tmp = page.getWizard();
-                    if( age >= 18 ) {
+                    if( age.valueOf() >= 18 ) {
                         return tmp === null ? null : tmp.getPage('page2adult');
                     }
                     return tmp === null ? null : tmp.getPage('page2child');
@@ -559,7 +561,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                   const age : Number = Number(parameters.age);
                   if( !parameters.age || isNaN(parameters.age)) {
                     items.push(createValidationItem(SEVERITY.ERROR, "age", "Age must not be blank"));
-                  } else if( age <= 3) {
+                  } else if( age.valueOf() <= 3) {
                     items.push(createValidationItem(SEVERITY.ERROR, "age", "No babies allowed"));
                   }
                   return {items: items};
@@ -598,7 +600,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
             performFinish(wizard:WebviewWizard, data: any): Promise<PerformFinishResponse | null> {
                 // Do something
                 var age : Number = Number(data.age);
-                if( age >= 18 ) {
+                if( age.valueOf() >= 18 ) {
                     vscode.window.showInformationMessage('Adult has cc number: ' + data.cc);
                 } else {
                     vscode.window.showInformationMessage('Child has favorite color: ' + data.favcolor);
@@ -611,7 +613,7 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
                 if( page.getId() === 'page1') {
                     var age : Number = Number(data.age);
                     const tmp = page.getWizard();
-                    if( age >= 18 ) {
+                    if( age.valueOf() >= 18 ) {
                         return tmp === null ? null : tmp.getPage('page2adult');
                     }
                     return tmp === null ? null : tmp.getPage('page2child');
@@ -635,3 +637,83 @@ export function getSinglePageAllControlsDefinition(context: vscode.ExtensionCont
     const wiz: WebviewWizard = new WebviewWizard("sample1", "sample1", context, def, new Map<string,string>());
     return wiz;
 }
+
+
+
+export function demonstrateCustomRenderer(context: vscode.ExtensionContext) : WebviewWizard {
+
+    let def : WizardDefinition = {
+        title: "Custom Renderer", 
+        description: "Example of a custom widget",
+        hideWizardHeader: true,
+        pages: [
+          {
+              id: 'page1',
+              hideWizardPageHeader: true,
+              fields: [
+                {
+                    id: "age",
+                    label: "Age",
+                    type: "textbox",
+                    description: "Let us know how old you are!"
+                },
+                {
+                    id: "weird",
+                    label: "Weird Widget",
+                    type: "weirdwidget",
+                    description: "Draw a weird widget!"
+                },
+              
+              ],
+              validator: (parameters:any) => {
+                  let items : ValidatorResponseItem[] = [];
+                  const age : Number = Number(parameters.age);
+                  if( !parameters.age || isNaN(parameters.age)) {
+                    items.push(createValidationItem(SEVERITY.ERROR, "age", "Age must not be blank"));
+                  } else if( age.valueOf() <= 3) {
+                    items.push(createValidationItem(SEVERITY.ERROR, "age", "No babies allowed"));
+                  }
+                  return {items: items};
+              }
+            }
+          ],
+          renderer: new class extends StandardWizardPageRenderer {
+              constructor() {
+                super();
+              }
+              createHTMLField(field: WizardPageFieldDefinition, data: any): string {
+                  if( field.type === 'weirdwidget') {
+                    return this.wrapHTMLField(field, false, createButton(undefined, `this.innerHTML=(this.innerHTML === 'Press Me' ? 'Stop poking me!' : 'Press Me');`, true, "Press Me"));
+                  } else {
+                      return super.createHTMLField(field, data);
+                  }
+              }
+          }(),
+          workflowManager: {
+            canFinish(wizard:WebviewWizard, data: any): boolean {
+                return data.age !== undefined;
+            },
+            performFinish(wizard:WebviewWizard, data: any): Promise<PerformFinishResponse | null> {
+                // Do something
+                var age : Number = Number(data.age);
+                if( age.valueOf() >= 18 ) {
+                    vscode.window.showInformationMessage('Adult');
+                } else {
+                    vscode.window.showInformationMessage('Child');
+                }
+                return new Promise<PerformFinishResponse | null>((res,rej) => {
+                    res(null);
+                });
+            },
+            getNextPage(page:IWizardPage, data: any): IWizardPage | null {
+                return null;
+            },
+            getPreviousPage(page:IWizardPage, data: any): IWizardPage | null {
+                return null;
+            }
+        }
+    };
+    const wiz: WebviewWizard = new WebviewWizard("sample1", "sample1", context, def, new Map<string,string>());
+    return wiz;
+
+  }
